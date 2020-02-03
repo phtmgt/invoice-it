@@ -1,12 +1,11 @@
-
-import moment from 'moment';
-import pug from 'pug';
-import fs from 'fs';
-import path from 'path';
 import Common from './common';
-import Recipient from './recipient';
 import Emitter from './emitter';
+import Recipient from './recipient';
+import fs from 'fs';
 import i18n from '../lib/i18n';
+import moment from 'moment';
+import path from 'path';
+import pug from 'pug';
 
 export default class Generator extends Common {
   constructor(config) {
@@ -178,14 +177,23 @@ export default class Generator extends Common {
     if (Array.isArray(tmp)) {
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
-        tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].price * tmp[i].qt);
-        tmp[i].total_product_taxes = this.formatOutputNumber(this.round(tmp[i].total_product_without_taxes * (tmp[i].tax / 100)));
-        tmp[i].total_product_with_taxes = this.formatOutputNumber(this.round(Number(tmp[i].total_product_without_taxes) + Number(tmp[i].total_product_taxes)));
+        // tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].price * tmp[i].qt);
+        // tmp[i].total_product_taxes = this.formatOutputNumber(this.round(tmp[i].total_product_without_taxes * (tmp[i].tax / 100)));
+        // tmp[i].total_product_with_taxes = this.formatOutputNumber(this.round(Number(tmp[i].total_product_without_taxes) + Number(tmp[i].total_product_taxes)));
+        // tmp[i].price = this.formatOutputNumber(tmp[i].price);
+        // tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
+        // this.total_exc_taxes += Number(tmp[i].total_product_without_taxes);
+        // this.total_inc_taxes += Number(tmp[i].total_product_with_taxes);
+        // this.total_taxes += Number(tmp[i].total_product_taxes);
+
+        tmp[i].total_product_without_taxes = Number(tmp[i].price) * Number(tmp[i].qt);
+        tmp[i].total_product_taxes = this.round(tmp[i].total_product_without_taxes * Number(tmp[i].tax / 100));
+        tmp[i].total_product_with_taxes = tmp[i].total_product_without_taxes + tmp[i].total_product_taxes;
         tmp[i].price = this.formatOutputNumber(tmp[i].price);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
-        this.total_exc_taxes += Number(tmp[i].total_product_without_taxes);
-        this.total_inc_taxes += Number(tmp[i].total_product_with_taxes);
-        this.total_taxes += Number(tmp[i].total_product_taxes);
+        this.total_exc_taxes += tmp[i].total_product_without_taxes;
+        this.total_inc_taxes += tmp[i].total_product_with_taxes;
+        this.total_taxes += tmp[i].total_product_taxes;
       }
     } else {
       this._checkArticle(tmp);
