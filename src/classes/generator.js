@@ -177,6 +177,9 @@ export default class Generator extends Common {
     if (Array.isArray(tmp)) {
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
+
+        // Original code
+
         // tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].price * tmp[i].qt);
         // tmp[i].total_product_taxes = this.formatOutputNumber(this.round(tmp[i].total_product_without_taxes * (tmp[i].tax / 100)));
         // tmp[i].total_product_with_taxes = this.formatOutputNumber(this.round(Number(tmp[i].total_product_without_taxes) + Number(tmp[i].total_product_taxes)));
@@ -186,27 +189,39 @@ export default class Generator extends Common {
         // this.total_inc_taxes += Number(tmp[i].total_product_with_taxes);
         // this.total_taxes += Number(tmp[i].total_product_taxes);
 
+        // New code
+
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
-        tmp[i].total_product_taxes = this.round(tmp[i].total_product_without_taxes * this.round(Number(tmp[i].tax) / 100));
-        tmp[i].total_product_with_taxes = this.round(tmp[i].total_product_without_taxes + tmp[i].total_product_taxes);
         tmp[i].price = this.formatOutputNumber(tmp[i].price);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
         this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
-        this.total_inc_taxes = this.round(this.total_inc_taxes + tmp[i].total_product_with_taxes);
-        this.total_taxes = this.round(this.total_taxes + tmp[i].total_product_taxes);
       }
     } else {
       this._checkArticle(tmp);
-      tmp.total_product_without_taxes = this.formatOutputNumber(tmp.price * tmp.qt);
-      tmp.total_product_taxes = this.formatOutputNumber(this.round(tmp.total_product_without_taxes * (tmp.tax / 100)));
-      tmp.total_product_with_taxes = this.formatOutputNumber(this.round(Number(tmp.total_product_without_taxes) + Number(tmp.total_product_taxes)));
+
+      // Original code
+
+      // tmp.total_product_without_taxes = this.formatOutputNumber(tmp.price * tmp.qt);
+      // tmp.total_product_taxes = this.formatOutputNumber(this.round(tmp.total_product_without_taxes * (tmp.tax / 100)));
+      // tmp.total_product_with_taxes = this.formatOutputNumber(this.round(Number(tmp.total_product_without_taxes) + Number(tmp.total_product_taxes)));
+      // tmp.price = this.formatOutputNumber(tmp.price);
+      // tmp.tax = this.formatOutputNumber(tmp.tax);
+      // this.total_exc_taxes += Number(tmp.total_product_without_taxes);
+      // this.total_inc_taxes += Number(tmp.total_product_with_taxes);
+      // this.total_taxes += Number(tmp.total_product_taxes);
+
+      // New code
+
+      tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
       tmp.price = this.formatOutputNumber(tmp.price);
       tmp.tax = this.formatOutputNumber(tmp.tax);
-      this.total_exc_taxes += Number(tmp.total_product_without_taxes);
-      this.total_inc_taxes += Number(tmp.total_product_with_taxes);
-      this.total_taxes += Number(tmp.total_product_taxes);
+      this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
     }
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
+
+    // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
+    this.total_taxes = this.round(this.total_exc_taxes * (Number(tmp[i].tax) / 100));
+    this.total_inc_taxes = this.total_exc_taxes + this.total_taxes;
   }
 
   /**
