@@ -174,6 +174,7 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
+    var tax = 0;
     if (Array.isArray(tmp)) {
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
@@ -193,7 +194,8 @@ export default class Generator extends Common {
 
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
         tmp[i].price = this.formatOutputNumber(tmp[i].price);
-        tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
+        // tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
+        tax = (i * tax + tmp[i].tax) / (i + 1);
         this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
       }
     } else {
@@ -214,13 +216,15 @@ export default class Generator extends Common {
 
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
       tmp.price = this.formatOutputNumber(tmp.price);
-      tmp.tax = this.formatOutputNumber(tmp.tax);
+      // tmp.tax = this.formatOutputNumber(tmp.tax);
+      tax = tmp.tax;
       this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
     }
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
-    this.total_taxes = this.round(this.total_exc_taxes * (Number(tmp[i].tax) / 100));
+    // !!! This is not right, there might be different VAT rates on each line
+    this.total_taxes = this.round(this.total_exc_taxes * (Number(tax) / 100));
     this.total_inc_taxes = this.total_exc_taxes + this.total_taxes;
   }
 
