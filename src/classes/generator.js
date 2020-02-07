@@ -224,8 +224,11 @@ export default class Generator extends Common {
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
+    console.log(this.total_exc_taxes);
     this.total_taxes = this.round(this.total_exc_taxes * (Number(tax) / 100));
+    console.log(this.total_taxes);
     this.total_inc_taxes = this.total_exc_taxes + this.total_taxes;
+    console.log(this.total_inc_taxes);
   }
 
   /**
