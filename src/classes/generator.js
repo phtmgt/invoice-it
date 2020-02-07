@@ -196,7 +196,7 @@ export default class Generator extends Common {
         // tmp[i].price = this.formatOutputNumber(tmp[i].price);
         // tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
         tax = (i * tax + tmp[i].tax) / (i + 1);
-        this.total_exc_taxes = this.total_exc_taxes + tmp[i].total_product_without_taxes;
+        this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
       }
     } else {
       this._checkArticle(tmp);
@@ -218,17 +218,14 @@ export default class Generator extends Common {
       // tmp.price = this.formatOutputNumber(tmp.price);
       // tmp.tax = this.formatOutputNumber(tmp.tax);
       tax = tmp.tax;
-      this.total_exc_taxes = this.total_exc_taxes + tmp.total_product_without_taxes;
+      this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
     }
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
-    console.log(this.total_exc_taxes);
     this.total_taxes = this.round(this.total_exc_taxes * (Number(tax) / 100));
-    console.log(this.total_taxes);
-    this.total_inc_taxes = this.total_exc_taxes + this.total_taxes;
-    console.log(this.total_inc_taxes);
+    this.total_inc_taxes = this.round(this.total_exc_taxes + this.total_taxes);
   }
 
   /**
@@ -296,18 +293,18 @@ export default class Generator extends Common {
     return {
       logo: this.logo,
       header_date: this.date,
-      table_information: i18n.__({phrase: 'table_information', locale: this.lang}),
-      table_description: i18n.__({phrase: 'table_description', locale: this.lang}),
-      table_tax: i18n.__({phrase: 'table_tax', locale: this.lang}),
-      table_quantity: i18n.__({phrase: 'table_quantity', locale: this.lang}),
-      table_price_without_taxes: i18n.__({phrase: 'table_price_without_taxes', locale: this.lang}),
-      table_price_without_taxes_unit: i18n.__({phrase: 'table_price_without_taxes_unit', locale: this.lang}),
-      table_note: i18n.__({phrase: 'table_note', locale: this.lang}),
-      table_total_without_taxes: i18n.__({phrase: 'table_total_without_taxes', locale: this.lang}),
-      table_total_taxes: i18n.__({phrase: 'table_total_taxes', locale: this.lang}),
-      table_total_with_taxes: i18n.__({phrase: 'table_total_with_taxes', locale: this.lang}),
-      fromto_phone: i18n.__({phrase: 'fromto_phone', locale: this.lang}),
-      fromto_mail: i18n.__({phrase: 'fromto_mail', locale: this.lang}),
+      table_information: i18n.__({ phrase: 'table_information', locale: this.lang }),
+      table_description: i18n.__({ phrase: 'table_description', locale: this.lang }),
+      table_tax: i18n.__({ phrase: 'table_tax', locale: this.lang }),
+      table_quantity: i18n.__({ phrase: 'table_quantity', locale: this.lang }),
+      table_price_without_taxes: i18n.__({ phrase: 'table_price_without_taxes', locale: this.lang }),
+      table_price_without_taxes_unit: i18n.__({ phrase: 'table_price_without_taxes_unit', locale: this.lang }),
+      table_note: i18n.__({ phrase: 'table_note', locale: this.lang }),
+      table_total_without_taxes: i18n.__({ phrase: 'table_total_without_taxes', locale: this.lang }),
+      table_total_taxes: i18n.__({ phrase: 'table_total_taxes', locale: this.lang }),
+      table_total_with_taxes: i18n.__({ phrase: 'table_total_with_taxes', locale: this.lang }),
+      fromto_phone: i18n.__({ phrase: 'fromto_phone', locale: this.lang }),
+      fromto_mail: i18n.__({ phrase: 'fromto_mail', locale: this.lang }),
       footer: this.getFooter(),
       emitter_name: this.emitter().name,
       emitter_street_number: this.emitter().street_number,
@@ -354,10 +351,10 @@ export default class Generator extends Common {
    */
   getPhrases(type) {
     return {
-      header_title: i18n.__({phrase: `${type}_header_title`, locale: this.lang}),
-      header_subject: i18n.__({phrase: `${type}_header_subject`, locale: this.lang}),
-      header_reference: i18n.__({phrase: `${type}_header_reference`, locale: this.lang}),
-      header_date: i18n.__({phrase: `${type}_header_date`, locale: this.lang}),
+      header_title: i18n.__({ phrase: `${type}_header_title`, locale: this.lang }),
+      header_subject: i18n.__({ phrase: `${type}_header_subject`, locale: this.lang }),
+      header_reference: i18n.__({ phrase: `${type}_header_reference`, locale: this.lang }),
+      header_date: i18n.__({ phrase: `${type}_header_date`, locale: this.lang }),
     };
   }
 
@@ -426,7 +423,7 @@ export default class Generator extends Common {
    * @returns {*}
    */
   getFooter() {
-    if (!this.footer) return i18n.__({phrase: 'footer', locale: this.lang});
+    if (!this.footer) return i18n.__({ phrase: 'footer', locale: this.lang });
 
     if (this.lang === 'en') return this.footer.en;
     if (this.lang === 'fr') return this.footer.fr;
@@ -493,7 +490,7 @@ export default class Generator extends Common {
    */
   _toPDF(keys, params = []) {
     const htmlToPdf = this._loadHtmlToPdf();
-    const pdf = htmlToPdf.create(this._toHTML(keys, params).html, {timeout: '90000'});
+    const pdf = htmlToPdf.create(this._toHTML(keys, params).html, { timeout: '90000' });
     return {
       pdf,
       toFile: (filepath) => this._toFileFromPDF(pdf, (filepath) || `${keys.filename}.pdf`),
