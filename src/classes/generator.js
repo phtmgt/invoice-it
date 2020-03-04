@@ -174,6 +174,8 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
+    var tax = 0;
+
     if (Array.isArray(tmp)) {
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
