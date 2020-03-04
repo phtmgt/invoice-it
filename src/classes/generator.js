@@ -193,8 +193,8 @@ export default class Generator extends Common {
         // New code
 
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
-        tax = (i * tax + tmp[i].tax) / (i + 1);
-        this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
+        tmp[i].tax = (i * tax + tmp[i].tax) / (i + 1);
+        this.total_exc_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes));
 
         // format for display
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes);
@@ -218,8 +218,7 @@ export default class Generator extends Common {
       // New code
 
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
-      tax = tmp.tax;
-      this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
+      this.total_exc_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
 
       // format for display
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes);
@@ -230,8 +229,8 @@ export default class Generator extends Common {
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
-    this.total_taxes = this.round(this.total_exc_taxes * (Number(tax) / 100));
-    this.total_inc_taxes = this.round(this.total_exc_taxes + this.total_taxes);
+    this.total_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes * (Number(tax) / 100)));
+    this.total_inc_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes + this.total_taxes));
   }
 
   /**
