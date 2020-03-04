@@ -174,7 +174,6 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
-    var tax = 0;
     if (Array.isArray(tmp)) {
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
@@ -230,8 +229,14 @@ export default class Generator extends Common {
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
-    this.total_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes * (Number(tax) / 100)));
-    this.total_inc_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes + this.total_taxes));
+    this.total_taxes = this.round(this.total_exc_taxes * (Number(tax) / 100));
+    this.total_inc_taxes = this.round(this.total_exc_taxes + this.total_taxes);
+
+    // Format for display
+    this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
+    this.total_taxes = this.formatOutputNumber(this.total_taxes);
+    this.total_inc_taxes = this.formatOutputNumber(this.total_inc_taxes);
+
   }
 
   /**
