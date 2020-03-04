@@ -218,7 +218,7 @@ export default class Generator extends Common {
       // New code
 
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
-      this.total_exc_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
+      this.total_exc_taxes = this.formatOutputNumber(this.round(this.total_exc_taxes + tmp.total_product_without_taxes));
 
       // format for display
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes);
