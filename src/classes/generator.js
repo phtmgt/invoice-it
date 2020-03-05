@@ -235,9 +235,9 @@ export default class Generator extends Common {
     this.total_inc_taxes = this.round(this.total_exc_taxes + this.total_taxes);
 
     // Format for display
-    this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
-    this.total_taxes = this.formatOutputNumber(this.total_taxes);
-    this.total_inc_taxes = this.formatOutputNumber(this.total_inc_taxes);
+    // this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
+    // this.total_taxes = this.formatOutputNumber(this.total_taxes);
+    // this.total_inc_taxes = this.formatOutputNumber(this.total_inc_taxes);
 
   }
 
