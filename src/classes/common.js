@@ -62,6 +62,8 @@ export default class Common {
       const split = number.split('.');
       if (split[1].length === 1) return `${split[0]}${decimalSeparator}${split[1]}0`;
       if (split[1].length === 2) return `${split[0]}${decimalSeparator}${split[1][0]}${split[1][1]}`;
+      if (split[1].length === 3) return `${split[0]}${decimalSeparator}${split[1][0]}${split[1][1]}${split[1][2]}`;
+      if (split[1].length === 4) return `${split[0]}${decimalSeparator}${split[1][0]}${split[1][1]}${split[1][2]}${split[1][3]}`;
     }
     return `${number}${decimalSeparator}00`;
   }

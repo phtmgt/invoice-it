@@ -201,6 +201,7 @@ export default class Generator extends Common {
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes);
         tmp[i].price = this.formatOutputNumber(tmp[i].price);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax);
+        tmp[i].qt = this.formatOutputNumber(tmp[i].qt);
       }
     } else {
       this._checkArticle(tmp);
@@ -226,6 +227,7 @@ export default class Generator extends Common {
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes);
       tmp.price = this.formatOutputNumber(tmp.price);
       tmp.tax = this.formatOutputNumber(tmp.tax);
+      tmp.qt = this.formatOutputNumber(tmp.qt);
     }
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
 
