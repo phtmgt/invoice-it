@@ -522,7 +522,7 @@ export default class Generator extends Common {
    */
   _toPDF(keys, params = []) {
     const htmlToPdf = this._loadHtmlToPdf();
-    const pdf = htmlToPdf.create(this._toHTML(keys, params).html, { timeout: '90000' });
+    const pdf = htmlToPdf.create(this._toHTML(keys, params).html, { timeout: '90000', dpi: '300' });
     return {
       pdf,
       toFile: (filepath) => this._toFileFromPDF(pdf, (filepath) || `${keys.filename}.pdf`),
