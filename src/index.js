@@ -22,6 +22,7 @@ generator.configure({
     date: new Date(),
     date_format: 'DD/MM/YYYY',
     lang: 'en',
+    timezone: 'Europe/Sofia'
   },
 });
 

@@ -3,7 +3,7 @@ import Emitter from './emitter';
 import Recipient from './recipient';
 import fs from 'fs';
 import i18n from '../lib/i18n';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import path from 'path';
 import pug from 'pug';
 
@@ -36,6 +36,15 @@ export default class Generator extends Common {
     const tmp = value.toLowerCase();
     if (!this._availableLocale.includes(tmp)) throw new Error(`Wrong lang, please set one of ${this._availableLocale.join(', ')}`);
     this._lang = tmp;
+  }
+
+  get timezone() {
+    return this._timezone;
+  }
+
+  set timezone(value) {
+    const tmp = value;
+    this._timezone = tmp;
   }
 
   get id() {
@@ -127,12 +136,12 @@ export default class Generator extends Common {
   }
 
   get date() {
-    return (!this._date) ? moment().format(this.date_format) : this._date;
+    return (!this._date) ? moment().tz(this.timezone).format(this.date_format) : this._date;
   }
 
   set date(value) {
     if (!moment(value).isValid()) throw new Error('Date not valid');
-    this._date = moment(value).format(this.date_format);
+    this._date = moment(value).tz(this.timezone).format(this.date_format);
   }
 
   get total_exc_taxes() {

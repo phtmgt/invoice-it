@@ -43,6 +43,7 @@
     "i18n-factory": "0.0.2",
     "json-override": "^0.2.0",
     "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "pug": "^2.0.3"
   },
   "peerDependencies": {
