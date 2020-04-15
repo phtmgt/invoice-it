@@ -211,6 +211,10 @@ html(lang='en')
                 white-space: pre;
             }
 
+            #summary #note p#bank {
+                font-weight: bold;
+            }
+
             #summary #total table {
                 font-size: 85%;
                 width: 260px;
@@ -326,6 +330,7 @@ html(lang='en')
                 #note
                     h4=table_note
                     p=table_note_content
+                    p#bank=table_bank_details_content
                 #total
                     table(border='1')
                         tr

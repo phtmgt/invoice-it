@@ -118,6 +118,14 @@ export default class Generator extends Common {
     this._invoice_note = value;
   }
 
+  get invoice_bank_details() {
+    return this._invoice_bank_details;
+  }
+
+  set invoice_bank_details(value) {
+    this._invoice_bank_details = value;
+  }
+
   get footer() {
     return this._footer;
   }
@@ -282,7 +290,7 @@ export default class Generator extends Common {
    * @returns {[string,string,string,string]}
    */
   _itemsToHydrate() {
-    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer', 'timezone'];
+    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer', 'timezone', 'invoice_bank_details'];
   }
 
   /**
@@ -394,6 +402,7 @@ export default class Generator extends Common {
       invoice_header_reference_value: this.getReferenceFromPattern('invoice'),
       invoice_header_date: this.getPhrases('invoice').header_date,
       table_note_content: this.invoice_note,
+      table_bank_details_content: this.invoice_bank_details,
       note: (note) => ((note) ? this.invoice_note = note : this.invoice_note),
       filename: 'invoice',
     };
