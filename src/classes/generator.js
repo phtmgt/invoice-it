@@ -39,7 +39,7 @@ export default class Generator extends Common {
   }
 
   get timezone() {
-    return this._timezone;
+    return (!this._timezone) ? 'Europe/Sofia' : this._timezone;
   }
 
   set timezone(value) {
