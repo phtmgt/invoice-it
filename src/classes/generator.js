@@ -136,12 +136,12 @@ export default class Generator extends Common {
   }
 
   get date() {
-    return (!this._date) ? moment().tz(this.timezone).format(this.date_format) : this._date;
+    return (!this._date) ? moment().tz('Europe/Sofia').format(this.date_format) : this._date;
   }
 
   set date(value) {
     if (!moment(value).isValid()) throw new Error('Date not valid');
-    this._date = moment(value).tz(this.timezone).format(this.date_format);
+    this._date = moment(value).tz('Europe/Sofia').format(this.date_format);
   }
 
   get total_exc_taxes() {
