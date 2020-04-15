@@ -43,8 +43,7 @@ export default class Generator extends Common {
   }
 
   set timezone(value) {
-    const tmp = value;
-    this._timezone = tmp;
+    this._timezone = value;
   }
 
   get id() {
@@ -136,12 +135,12 @@ export default class Generator extends Common {
   }
 
   get date() {
-    return (!this._date) ? moment().tz('Europe/Sofia').format(this.date_format) : this._date;
+    return (!this._date) ? moment().tz(this.timezone).format(this.date_format) : this._date;
   }
 
   set date(value) {
     if (!moment(value).isValid()) throw new Error('Date not valid');
-    this._date = moment(value).tz('Europe/Sofia').format(this.date_format);
+    this._date = moment(value).tz(this.timezone).format(this.date_format);
   }
 
   get total_exc_taxes() {
@@ -283,7 +282,7 @@ export default class Generator extends Common {
    * @returns {[string,string,string,string]}
    */
   _itemsToHydrate() {
-    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer'];
+    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer', 'timezone'];
   }
 
   /**
