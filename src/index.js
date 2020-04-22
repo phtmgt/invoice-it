@@ -24,6 +24,7 @@ generator.configure({
     invoice_template: `${__dirname}/../static/invoice.pug`,
     invoice_note: '',
     invoice_bank_details: '',
+    invoice_reference: '',
     date: new Date(),
     date_format: 'DD/MM/YYYY',
     lang: 'en',

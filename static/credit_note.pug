@@ -259,9 +259,10 @@ html(lang='en')
                     img(src=logo, alt='', height='50')
                 #reference
                     h3
-                        strong=invoice_header_subject
-                    h4 #{invoice_header_reference} #{invoice_header_reference_value}
-                    p #{invoice_header_date} #{header_date}
+                        strong=credit_note_header_subject
+                    h4 #{credit_note_header_reference} #{credit_note_header_reference_value}
+                    h4 #{credit_note_invoice_header_reference} #{credit_note_invoice_header_reference_value}
+                    p #{credit_note_header_date} #{header_date}
             #fromto
                 #from
                     p

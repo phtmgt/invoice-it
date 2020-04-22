@@ -11,6 +11,7 @@
   "credit_note_header_title": "Credit Note",
   "credit_note_header_subject": "Credit Note",
   "credit_note_header_reference": "Ref.:",
+  "credit_note_invoice_header_reference": "Invoice: ",
   "credit_note_header_date": "Credit note date:",
   "debit_note_header_title": "Credit Note",
   "debit_note_header_subject": "Credit Note",

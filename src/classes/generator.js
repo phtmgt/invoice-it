@@ -102,6 +102,14 @@ export default class Generator extends Common {
     this._debit_note_template = value;
   }
 
+  get invoice_reference() {
+    return this._invoice_reference;
+  }
+
+  set invoice_reference(value) {
+    this._invoice_reference = value;
+  }
+
   get credit_note_template() {
     return this._credit_note_template;
   }
@@ -206,7 +214,7 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
-    var tax = 0;
+    let tax = 0;
 
     if (Array.isArray(tmp)) {
       for (let i = 0; i < tmp.length; i += 1) {
@@ -272,7 +280,6 @@ export default class Generator extends Common {
     // this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
     // this.total_taxes = this.formatOutputNumber(this.total_taxes);
     // this.total_inc_taxes = this.formatOutputNumber(this.total_inc_taxes);
-
   }
 
   /**
@@ -306,7 +313,24 @@ export default class Generator extends Common {
    * @returns {[string,string,string,string]}
    */
   _itemsToHydrate() {
-    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer', 'timezone', 'invoice_bank_details', 'credit_note_template', 'debit_note_template'];
+    return [
+      'logo',
+      'order_template',
+      'invoice_template',
+      'date_format',
+      'date',
+      'order_reference_pattern',
+      'invoice_reference_pattern',
+      'order_note',
+      'invoice_note',
+      'lang',
+      'footer',
+      'timezone',
+      'invoice_bank_details',
+      'credit_note_template',
+      'debit_note_template',
+      'invoice_reference',
+    ];
   }
 
   /**
@@ -461,6 +485,7 @@ export default class Generator extends Common {
       credit_note_header_subject: this.getPhrases('credit_note').header_subject,
       credit_note_header_reference: this.getPhrases('credit_note').header_reference,
       credit_note_header_reference_value: this.getReferenceFromPattern('credit_note'),
+      credit_note_invoice_header_reference_value: this.invoice_reference,
       credit_note_header_date: this.getPhrases('credit_note').header_date,
       table_note_content: this.invoice_note,
       table_bank_details_content: this.invoice_bank_details,
@@ -560,7 +585,7 @@ export default class Generator extends Common {
    * @return {*}
    */
   getReferenceFromPattern(type) {
-    if (!['order', 'invoice'].includes(type)) throw new Error('Type have to be "order" or "invoice"');
+    if (!['order', 'invoice', 'creditNote', 'debitNote'].includes(type)) throw new Error('Type have to be "order" or "invoice"');
     if (this.reference) return this.reference;
     return this.setReferenceFromPattern((type === 'order') ? this.order_reference_pattern : this.invoice_reference_pattern);
   }
