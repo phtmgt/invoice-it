@@ -94,6 +94,22 @@ export default class Generator extends Common {
     this._order_template = value;
   }
 
+  get debit_note_template() {
+    return this._debit_note_template;
+  }
+
+  set debit_note_template(value) {
+    this._debit_note_template = value;
+  }
+
+  get credit_note_template() {
+    return this._credit_note_template;
+  }
+
+  set credit_note_template(value) {
+    this._credit_note_template = value;
+  }
+
   get invoice_template() {
     return this._invoice_template;
   }
@@ -290,7 +306,7 @@ export default class Generator extends Common {
    * @returns {[string,string,string,string]}
    */
   _itemsToHydrate() {
-    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer', 'timezone', 'invoice_bank_details'];
+    return ['logo', 'order_template', 'invoice_template', 'date_format', 'date', 'order_reference_pattern', 'invoice_reference_pattern', 'order_note', 'invoice_note', 'lang', 'footer', 'timezone', 'invoice_bank_details', 'credit_note_template', 'debit_note_template'];
   }
 
   /**
@@ -371,7 +387,21 @@ export default class Generator extends Common {
    * @private
    */
   _compile(keys) {
-    const template = keys.filename === 'order' ? this.order_template : this.invoice_template;
+    let template;
+    switch (keys.filename) {
+      case 'order':
+        template = this.order_template;
+        break;
+      case 'credit_note':
+        template = this.credit_note_template;
+        break;
+      case 'debit_note':
+        template = this.debit_note_template;
+        break;
+      default:
+        template = this.invoice_template;
+    }
+    // const template = keys.filename === 'order' ? this.order_template : keys.filename === 'credit_note' ? this.credit_note_template : keys.filename === 'debit_note' ? this.debit_note_template : this.invoice_template;
     const compiled = pug.compileFile(path.resolve(template));
     return compiled(keys);
   }
@@ -405,6 +435,68 @@ export default class Generator extends Common {
       table_bank_details_content: this.invoice_bank_details,
       note: (note) => ((note) ? this.invoice_note = note : this.invoice_note),
       filename: 'invoice',
+    };
+    params.forEach((phrase) => {
+      if (typeof phrase === 'string') {
+        keys[phrase] = i18n.__({ phrase, locale: this.lang });
+      } else if (typeof phrase === 'object' && phrase.key && phrase.value) {
+        keys[phrase.key] = phrase.value;
+      }
+    });
+
+    return Object.assign(keys, {
+      toHTML: () => this._toHTML(keys, params),
+      toPDF: () => this._toPDF(keys, params),
+    }, this._preCompileCommonTranslations());
+  }
+
+  /**
+   * @description Return invoice translation keys object
+   * @param params
+   * @returns {*}
+   */
+  getCreditNote(params = []) {
+    const keys = {
+      credit_note_header_title: this.getPhrases('credit_note').header_title,
+      credit_note_header_subject: this.getPhrases('credit_note').header_subject,
+      credit_note_header_reference: this.getPhrases('credit_note').header_reference,
+      credit_note_header_reference_value: this.getReferenceFromPattern('credit_note'),
+      credit_note_header_date: this.getPhrases('credit_note').header_date,
+      table_note_content: this.invoice_note,
+      table_bank_details_content: this.invoice_bank_details,
+      note: (note) => ((note) ? this.invoice_note = note : this.invoice_note),
+      filename: 'credit_note',
+    };
+    params.forEach((phrase) => {
+      if (typeof phrase === 'string') {
+        keys[phrase] = i18n.__({ phrase, locale: this.lang });
+      } else if (typeof phrase === 'object' && phrase.key && phrase.value) {
+        keys[phrase.key] = phrase.value;
+      }
+    });
+
+    return Object.assign(keys, {
+      toHTML: () => this._toHTML(keys, params),
+      toPDF: () => this._toPDF(keys, params),
+    }, this._preCompileCommonTranslations());
+  }
+
+  /**
+   * @description Return invoice translation keys object
+   * @param params
+   * @returns {*}
+   */
+  getDebitNote(params = []) {
+    const keys = {
+      debit_note_header_title: this.getPhrases('debit_note').header_title,
+      debit_note_header_subject: this.getPhrases('debit_note').header_subject,
+      debit_note_header_reference: this.getPhrases('debit_note').header_reference,
+      debit_note_header_reference_value: this.getReferenceFromPattern('debit_note'),
+      debit_note_header_date: this.getPhrases('debit_note').header_date,
+      table_note_content: this.invoice_note,
+      table_bank_details_content: this.invoice_bank_details,
+      note: (note) => ((note) ? this.invoice_note = note : this.invoice_note),
+      filename: 'debit_note',
     };
     params.forEach((phrase) => {
       if (typeof phrase === 'string') {
