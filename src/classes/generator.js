@@ -585,7 +585,7 @@ export default class Generator extends Common {
    * @return {*}
    */
   getReferenceFromPattern(type) {
-    if (!['order', 'invoice', 'creditNote', 'debitNote'].includes(type)) throw new Error('Type have to be "order" or "invoice"');
+    if (!['order', 'invoice', 'credit_note', 'debit_note'].includes(type)) throw new Error('Type have to be "order" or "invoice"');
     if (this.reference) return this.reference;
     return this.setReferenceFromPattern((type === 'order') ? this.order_reference_pattern : this.invoice_reference_pattern);
   }
