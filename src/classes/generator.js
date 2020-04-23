@@ -623,7 +623,21 @@ export default class Generator extends Common {
    * @private
    */
   _toHTML(keys, params = []) {
-    const html = this._compile(keys.filename === 'order' ? this.getOrder(params) : this.getInvoice(params));
+    // const html = this._compile(keys.filename === 'order' ? this.getOrder(params) : this.getInvoice(params));
+    let html;
+    switch (keys.filename) {
+      case 'order':
+        html = this._compile(this.getOrder(params));
+        break;
+      case 'credit_note':
+        html = this._compile(this.getCreditNote(params));
+        break;
+      case 'debit_note':
+        html = this._compile(this.getDebitNote(params));
+        break;
+      default:
+        html = this._compile(this.getInvoice(params));
+    }
     return {
       html,
       toFile: (filepath) => this._toFileFromHTML(html, (filepath) || `${keys.filename}.html`),
