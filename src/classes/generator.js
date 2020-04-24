@@ -440,7 +440,7 @@ export default class Generator extends Common {
       header_subject: i18n.__({ phrase: `${type}_header_subject`, locale: this.lang }),
       header_reference: i18n.__({ phrase: `${type}_header_reference`, locale: this.lang }),
       header_date: i18n.__({ phrase: `${type}_header_date`, locale: this.lang }),
-      invoice_header_reference: i18n.__({ phrase: `${type}invoice_header_reference`, locale: this.lang }),
+      invoice_header_reference: i18n.__({ phrase: `${type}_invoice_header_reference`, locale: this.lang }),
     };
   }
 
