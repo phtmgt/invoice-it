@@ -485,7 +485,7 @@ export default class Generator extends Common {
       credit_note_header_subject: this.getPhrases('credit_note').header_subject,
       credit_note_header_reference: this.getPhrases('credit_note').header_reference,
       credit_note_header_reference_value: this.getReferenceFromPattern('credit_note'),
-      credit_note_invoice_header_reference: this.getPhrases('credit_note').invoice_header_reference,
+      credit_note_invoice_header_reference: 'asdasdasdasdas',
       credit_note_invoice_header_reference_value: this.invoice_reference,
       credit_note_header_date: this.getPhrases('credit_note').header_date,
       table_note_content: this.invoice_note,
