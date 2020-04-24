@@ -440,6 +440,7 @@ export default class Generator extends Common {
       header_subject: i18n.__({ phrase: `${type}_header_subject`, locale: this.lang }),
       header_reference: i18n.__({ phrase: `${type}_header_reference`, locale: this.lang }),
       header_date: i18n.__({ phrase: `${type}_header_date`, locale: this.lang }),
+      invoice_header_reference: i18n.__({ phrase: `${type}invoice_header_reference`, locale: this.lang }),
     };
   }
 
@@ -485,7 +486,7 @@ export default class Generator extends Common {
       credit_note_header_subject: this.getPhrases('credit_note').header_subject,
       credit_note_header_reference: this.getPhrases('credit_note').header_reference,
       credit_note_header_reference_value: this.getReferenceFromPattern('credit_note'),
-      credit_note_invoice_header_reference: 'asdasdasdasdas',
+      credit_note_invoice_header_reference: this.getPhrases('credit_note').invoice_header_reference,
       credit_note_invoice_header_reference_value: this.invoice_reference,
       credit_note_header_date: this.getPhrases('credit_note').header_date,
       table_note_content: this.invoice_note,
