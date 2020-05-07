@@ -519,6 +519,8 @@ export default class Generator extends Common {
       debit_note_header_subject: this.getPhrases('debit_note').header_subject,
       debit_note_header_reference: this.getPhrases('debit_note').header_reference,
       debit_note_header_reference_value: this.getReferenceFromPattern('debit_note'),
+      debit_note_invoice_header_reference: this.getPhrases('debit_note').invoice_header_reference,
+      debit_note_invoice_header_reference_value: this.invoice_reference,
       debit_note_header_date: this.getPhrases('debit_note').header_date,
       table_note_content: this.invoice_note,
       table_bank_details_content: this.invoice_bank_details,
