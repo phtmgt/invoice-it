@@ -565,6 +565,8 @@ export default class Generator extends Common {
       pro_forma_header_reference: this.getPhrases('pro_forma').header_reference,
       pro_forma_header_reference_value: this.getReferenceFromPattern('pro_forma'),
       pro_forma_header_date: this.getPhrases('pro_forma').header_date,
+      header_emitter: this.getPhrases('pro_forma').header_emitter,
+      header_recipient: this.getPhrases('pro_forma').header_recipient,
       table_note_content: this.invoice_note,
       table_bank_details_content: this.invoice_bank_details,
       note: (note) => ((note) ? this.invoice_note = note : this.invoice_note),
