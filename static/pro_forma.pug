@@ -267,7 +267,8 @@ html(lang='en')
                     p
                         strong=pro_forma_header_emitter
                         br
-                        |       #{strong=emitter_name}
+                        br
+                        strong=emitter_name
                         br
                         |       #{emitter_first_name} #{emitter_last_name}
                         br
@@ -283,6 +284,7 @@ html(lang='en')
                     p
                         strong=pro_forma_header_recipient
                         //- strong=recipient_company
+                        br
                         br
                         |       #{recipient_first_name} #{recipient_last_name}
                         br
