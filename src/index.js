@@ -25,6 +25,8 @@ generator.configure({
     invoice_note: '',
     invoice_bank_details: '',
     invoice_reference: '',
+    pro_forma_template: `${__dirname}/../static/pro_forma.pug`,
+    pro_forma_note: '',
     date: new Date(),
     date_format: 'DD/MM/YYYY',
     lang: 'en',

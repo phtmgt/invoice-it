@@ -118,6 +118,14 @@ export default class Generator extends Common {
     this._credit_note_template = value;
   }
 
+  get pro_forma_template() {
+    return this._pro_forma_template;
+  }
+
+  set pro_forma_template(value) {
+    this._pro_forma_template = value;
+  }
+
   get invoice_template() {
     return this._invoice_template;
   }
@@ -330,6 +338,7 @@ export default class Generator extends Common {
       'credit_note_template',
       'debit_note_template',
       'invoice_reference',
+      'pro_forma_template',
     ];
   }
 
@@ -421,6 +430,9 @@ export default class Generator extends Common {
         break;
       case 'debit_note':
         template = this.debit_note_template;
+        break;
+      case 'pro_forma':
+        template = this.pro_forma_template;
         break;
       default:
         template = this.invoice_template;
@@ -542,6 +554,39 @@ export default class Generator extends Common {
   }
 
   /**
+   * @description Return invoice translation keys object
+   * @param params
+   * @returns {*}
+   */
+  getProForma(params = []) {
+    const keys = {
+      pro_forma_header_title: this.getPhrases('pro_forma').header_title,
+      pro_forma_header_subject: this.getPhrases('pro_forma').header_subject,
+      pro_forma_header_reference: this.getPhrases('pro_forma').header_reference,
+      pro_forma_header_reference_value: this.getReferenceFromPattern('pro_forma'),
+      pro_forma_invoice_header_reference: this.getPhrases('pro_forma').invoice_header_reference,
+      pro_forma_invoice_header_reference_value: this.invoice_reference,
+      pro_forma_header_date: this.getPhrases('pro_forma').header_date,
+      table_note_content: this.invoice_note,
+      table_bank_details_content: this.invoice_bank_details,
+      note: (note) => ((note) ? this.invoice_note = note : this.invoice_note),
+      filename: 'pro_forma',
+    };
+    params.forEach((phrase) => {
+      if (typeof phrase === 'string') {
+        keys[phrase] = i18n.__({ phrase, locale: this.lang });
+      } else if (typeof phrase === 'object' && phrase.key && phrase.value) {
+        keys[phrase.key] = phrase.value;
+      }
+    });
+
+    return Object.assign(keys, {
+      toHTML: () => this._toHTML(keys, params),
+      toPDF: () => this._toPDF(keys, params),
+    }, this._preCompileCommonTranslations());
+  }
+
+  /**
    * @description Return order translation keys object
    * @param params
    * @returns {*}
@@ -589,7 +634,7 @@ export default class Generator extends Common {
    * @return {*}
    */
   getReferenceFromPattern(type) {
-    if (!['order', 'invoice', 'credit_note', 'debit_note'].includes(type)) throw new Error('Type have to be "order" or "invoice"');
+    if (!['order', 'invoice', 'credit_note', 'debit_note', 'pro_forma'].includes(type)) throw new Error('Type have to be "order" or "invoice"');
     if (this.reference) return this.reference;
     return this.setReferenceFromPattern((type === 'order') ? this.order_reference_pattern : this.invoice_reference_pattern);
   }
@@ -639,6 +684,9 @@ export default class Generator extends Common {
       case 'debit_note':
         html = this._compile(this.getDebitNote(params));
         break;
+      case 'pro_forma':
+            html = this._compile(this.getProForma(params));
+            break;
       default:
         html = this._compile(this.getInvoice(params));
     }
