@@ -265,7 +265,9 @@ html(lang='en')
             #fromto
                 #from
                     p
-                        strong=emitter_name
+                        strong=header_emitter
+                        br
+                        |       strong=emitter_name
                         br
                         |       #{emitter_first_name} #{emitter_last_name}
                         br
@@ -279,7 +281,8 @@ html(lang='en')
                         |       #{emitter_mail ? fromto_mail : ''} #{emitter_mail}
                 #to
                     p
-                        strong=recipient_company
+                        strong=header_recipient
+                        //- strong=recipient_company
                         br
                         |       #{recipient_first_name} #{recipient_last_name}
                         br
