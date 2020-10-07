@@ -453,6 +453,8 @@ export default class Generator extends Common {
       header_reference: i18n.__({ phrase: `${type}_header_reference`, locale: this.lang }),
       header_date: i18n.__({ phrase: `${type}_header_date`, locale: this.lang }),
       invoice_header_reference: i18n.__({ phrase: `${type}_invoice_header_reference`, locale: this.lang }),
+      header_emitter: i18n.__({ phrase: `${type}_header_emitter`, locale: this.lang }),
+      header_recipient: i18n.__({ phrase: `${type}_header_recipient`, locale: this.lang })
     };
   }
 
