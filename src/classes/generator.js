@@ -246,10 +246,10 @@ export default class Generator extends Common {
         this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
 
         // format for display
-        tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : null);
-        tmp[i].price = this.formatOutputNumber(tmp[i].price, this._lang === 'en' ? '.' : null);
-        tmp[i].tax = this.formatOutputNumber(tmp[i].tax, this._lang === 'en' ? '.' : null);
-        tmp[i].qt = this.formatOutputNumber(tmp[i].qt, this._lang === 'en' ? '.' : null);
+        tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
+        tmp[i].price = this.formatOutputNumber(tmp[i].price, this._lang === 'en' ? '.' : undefined);
+        tmp[i].tax = this.formatOutputNumber(tmp[i].tax, this._lang === 'en' ? '.' : undefined);
+        tmp[i].qt = this.formatOutputNumber(tmp[i].qt, this._lang === 'en' ? '.' : undefined);
       }
     } else {
       this._checkArticle(tmp);
@@ -272,10 +272,10 @@ export default class Generator extends Common {
       this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
 
       // format for display
-      tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : null);
-      tmp.price = this.formatOutputNumber(tmp.price, this._lang === 'en' ? '.' : null);
-      tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : null);
-      tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : null);
+      tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
+      tmp.price = this.formatOutputNumber(tmp.price, this._lang === 'en' ? '.' : undefined);
+      tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
+      tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : undefined);
     }
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
 
@@ -405,9 +405,9 @@ export default class Generator extends Common {
       recipient_phone: this.recipient().phone,
       recipient_mail: this.recipient().mail,
       articles: this.article,
-      table_total_without_taxes_value: this.formatOutputNumber(this.total_exc_taxes, this._lang === 'en' ? '.' : null),
-      table_total_taxes_value: this.formatOutputNumber(this.total_taxes, this._lang === 'en' ? '.' : null),
-      table_total_with_taxes_value: this.formatOutputNumber(this.total_inc_taxes, this._lang === 'en' ? '.' : null),
+      table_total_without_taxes_value: this.formatOutputNumber(this.total_exc_taxes, this._lang === 'en' ? '.' : undefined),
+      table_total_taxes_value: this.formatOutputNumber(this.total_taxes, this._lang === 'en' ? '.' : undefined),
+      table_total_with_taxes_value: this.formatOutputNumber(this.total_inc_taxes, this._lang === 'en' ? '.' : undefined),
       template_configuration: this._templateConfiguration(),
       moment: moment(),
     };
