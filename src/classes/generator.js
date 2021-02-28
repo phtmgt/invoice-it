@@ -16,6 +16,7 @@ export default class Generator extends Common {
     this._total_taxes = 0;
     this._total_inc_taxes = 0;
     this._tax_base = 0;
+    this._tax_rate = 0;
     this._article = [];
     this._i18nConfigure(config.language);
     this.hydrate(config.global, this._itemsToHydrate());
@@ -200,6 +201,14 @@ export default class Generator extends Common {
     this._tax_base = value;
   }
 
+  get tax_rate() {
+    return this._tax_rate;
+  }
+
+  set tax_rate(value) {
+    this._tax_rate = value;
+  }
+
   get total_taxes() {
     return this._total_taxes;
   }
@@ -231,7 +240,6 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
-    let taxRate = 0;
 
     if (Array.isArray(tmp)) {
       // Determine total net amount in order to apply weights to tax rate
@@ -259,7 +267,7 @@ export default class Generator extends Common {
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
         // TODO: Calculate weighted tax rate (simplified VAT case)
         const weight = Number(tmp[i].total_product_without_taxes) / Number(totalNetAmount);
-        taxRate += weight * Number(tmp[i].tax);
+        this.tax_rate += weight * Number(tmp[i].tax);
         if (Number(tmp[i].tax) !== 0) {
           this.tax_base = this.round(Number(this.tax_base) + Number(tmp[i].total_product_without_taxes));
         }
@@ -288,8 +296,8 @@ export default class Generator extends Common {
       // New code
 
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
-      taxRate = Number(tmp.tax);
-      if (taxRate !== 0) {
+      this.tax_rate = Number(tmp.tax);
+      if (this.tax_rate !== 0) {
         this.tax_base = this.round(Number(this.tax_base) + Number(tmp.total_product_without_taxes));
       }
       this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + Number(tmp.total_product_without_taxes));
@@ -305,7 +313,7 @@ export default class Generator extends Common {
     
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
-    this.total_taxes = this.round(Number(this.tax_base) * (Number(taxRate) / 100));
+    this.total_taxes = this.round(Number(this.tax_base) * (Number(this.tax_rate) / 100));
     this.total_inc_taxes = this.round(Number(this.total_exc_taxes) + Number(this.total_taxes));
 
     // Format for display
