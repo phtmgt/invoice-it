@@ -191,6 +191,14 @@ export default class Generator extends Common {
     this._total_exc_taxes = value;
   }
 
+  get tax_base() {
+    return this._tax_base;
+  }
+
+  set tax_base(value) {
+    this._tax_base = value;
+  }
+
   get total_taxes() {
     return this._total_taxes;
   }
@@ -222,9 +230,14 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
-    let tax = 0;
+    let taxRate = 0;
 
     if (Array.isArray(tmp)) {
+      // Determine total net amount in order to apply weights to tax rate
+      const totalNetAmount = tmp.reduce((accumulator, article) => {
+        accumulator += this.round(Number(article.price) * Number(article.qt));
+        return accumulator;
+      }, 0);
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
 
@@ -242,7 +255,12 @@ export default class Generator extends Common {
         // New code
 
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
-        tax = (i * tax + tmp[i].tax) / (i + 1);
+        // TODO: Calculate weighted tax rate (simplified VAT case)
+        const weight = tmp[i].total_product_without_taxes / totalNetAmount;
+        taxRate += weight * tmp[i].tax;
+        if (tmp[i].tax !== 0) {
+          this.tax_base = this.round(this.tax_base + tmp[i].total_product_without_taxes);
+        }
         this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
 
         // format for display
@@ -268,7 +286,10 @@ export default class Generator extends Common {
       // New code
 
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
-      tax = tmp.tax;
+      taxRate = tmp.tax;
+      if (tmp.tax !== 0) {
+        this.tax_base = this.round(this.tax_base + tmp.total_product_without_taxes);
+      }
       this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
 
       // format for display
@@ -281,7 +302,7 @@ export default class Generator extends Common {
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
-    this.total_taxes = this.round(this.total_exc_taxes * (Number(tax) / 100));
+    this.total_taxes = this.round(this.tax_base * (Number(taxRate) / 100));
     this.total_inc_taxes = this.round(this.total_exc_taxes + this.total_taxes);
 
     // Format for display
@@ -365,7 +386,7 @@ export default class Generator extends Common {
   /**
    * @description Precompile translation to merging glabal with custom translations
    * @returns {{logo: *, header_date: *, table_information, table_description, table_tax, table_quantity,
-   * table_price_without_taxes, table_price_without_taxes_unit, table_note, table_total_without_taxes,
+   * table_price_without_taxes, table_price_without_taxes_unit, table_note, table_total_without_taxes, table_tax_base
    * table_total_taxes, table_total_with_taxes, fromto_phone, fromto_mail, footer, moment: (*|moment.Moment)}}
    * @private
    */
@@ -381,6 +402,7 @@ export default class Generator extends Common {
       table_price_without_taxes_unit: i18n.__({ phrase: 'table_price_without_taxes_unit', locale: this.lang }),
       table_note: i18n.__({ phrase: 'table_note', locale: this.lang }),
       table_total_without_taxes: i18n.__({ phrase: 'table_total_without_taxes', locale: this.lang }),
+      table_tax_base: i18n.__({ phrase: 'table_tax_base', locale: this.lang }),
       table_total_taxes: i18n.__({ phrase: 'table_total_taxes', locale: this.lang }),
       table_total_with_taxes: i18n.__({ phrase: 'table_total_with_taxes', locale: this.lang }),
       fromto_phone: i18n.__({ phrase: 'fromto_phone', locale: this.lang }),
@@ -406,6 +428,7 @@ export default class Generator extends Common {
       recipient_mail: this.recipient().mail,
       articles: this.article,
       table_total_without_taxes_value: this.formatOutputNumber(this.total_exc_taxes, this._lang === 'en' ? '.' : undefined),
+      table_tax_base_value: this.formatOutputNumber(this.tax_base, this._lang === 'en' ? '.' : undefined),
       table_total_taxes_value: this.formatOutputNumber(this.total_taxes, this._lang === 'en' ? '.' : undefined),
       table_total_with_taxes_value: this.formatOutputNumber(this.total_inc_taxes, this._lang === 'en' ? '.' : undefined),
       template_configuration: this._templateConfiguration(),
