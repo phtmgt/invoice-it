@@ -15,6 +15,7 @@ export default class Generator extends Common {
     this._total_exc_taxes = 0;
     this._total_taxes = 0;
     this._total_inc_taxes = 0;
+    this._tax_base = 0;
     this._article = [];
     this._i18nConfigure(config.language);
     this.hydrate(config.global, this._itemsToHydrate());
@@ -302,10 +303,15 @@ export default class Generator extends Common {
     
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
 
+    this.tax_base = 10;
+    taxRate = 20;
+    
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
     this.total_taxes = this.round(Number(this.tax_base) * (Number(taxRate) / 100));
     this.total_inc_taxes = this.round(Number(this.total_exc_taxes) + Number(this.total_taxes));
+
+    this.total_taxes = 999.99;
 
     // Format for display
     // this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
@@ -431,11 +437,8 @@ export default class Generator extends Common {
       articles: this.article,
       table_total_without_taxes_value: this.formatOutputNumber(this.total_exc_taxes, this._lang === 'en' ? '.' : undefined),
       table_tax_base_value: this.formatOutputNumber(this.tax_base, this._lang === 'en' ? '.' : undefined),
-      // table_tax_base_value: this.formatOutputNumber(Number(10)),
       table_total_taxes_value: this.formatOutputNumber(this.total_taxes, this._lang === 'en' ? '.' : undefined),
-      // table_total_taxes_value: this.formatOutputNumber(Number(2)),
       table_total_with_taxes_value: this.formatOutputNumber(this.total_inc_taxes, this._lang === 'en' ? '.' : undefined),
-      // table_total_with_taxes_value: this.formatOutputNumber(Number(12)),
       template_configuration: this._templateConfiguration(),
       moment: moment(),
     };
