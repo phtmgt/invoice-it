@@ -238,6 +238,7 @@ export default class Generator extends Common {
         accumulator += this.round(Number(article.price) * Number(article.qt));
         return accumulator;
       }, 0);
+      let taxRate = 0;
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
 
@@ -256,12 +257,12 @@ export default class Generator extends Common {
 
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
         // TODO: Calculate weighted tax rate (simplified VAT case)
-        const weight = tmp[i].total_product_without_taxes / totalNetAmount;
-        taxRate += weight * tmp[i].tax;
-        if (tmp[i].tax !== 0) {
-          this.tax_base = this.round(Number(this.tax_base) + tmp[i].total_product_without_taxes);
+        const weight = Number(tmp[i].total_product_without_taxes) / Number(totalNetAmount);
+        taxRate += weight * Number(tmp[i].tax);
+        if (Number(tmp[i].tax) !== 0) {
+          this.tax_base = this.round(Number(this.tax_base) + Number(tmp[i].total_product_without_taxes));
         }
-        this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + tmp[i].total_product_without_taxes);
+        this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + Number(tmp[i].total_product_without_taxes));
 
         // format for display
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
@@ -286,11 +287,11 @@ export default class Generator extends Common {
       // New code
 
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
-      taxRate = tmp.tax;
-      if (tmp.tax !== 0) {
-        this.tax_base = this.round(Number(this.tax_base) + tmp.total_product_without_taxes);
+      taxRate = Number(tmp.tax);
+      if (taxRate !== 0) {
+        this.tax_base = this.round(Number(this.tax_base) + Number(tmp.total_product_without_taxes));
       }
-      this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + tmp.total_product_without_taxes);
+      this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + Number(tmp.total_product_without_taxes));
 
       // format for display
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
@@ -298,12 +299,13 @@ export default class Generator extends Common {
       tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
       tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : undefined);
     }
+    
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // !!! This is not right, there might be different VAT rates on each line
-    this.total_taxes = this.round(this.tax_base * (Number(taxRate) / 100));
-    this.total_inc_taxes = this.round(this.total_exc_taxes + this.total_taxes);
+    this.total_taxes = this.round(Number(this.tax_base) * (Number(taxRate) / 100));
+    this.total_inc_taxes = this.round(Number(this.total_exc_taxes) + Number(this.total_taxes));
 
     // Format for display
     // this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
@@ -428,12 +430,12 @@ export default class Generator extends Common {
       recipient_mail: this.recipient().mail,
       articles: this.article,
       table_total_without_taxes_value: this.formatOutputNumber(this.total_exc_taxes, this._lang === 'en' ? '.' : undefined),
-      // table_tax_base_value: this.formatOutputNumber(this.tax_base, this._lang === 'en' ? '.' : undefined),
-      table_tax_base_value: this.formatOutputNumber(Number(10)),
-      // table_total_taxes_value: this.formatOutputNumber(this.total_taxes, this._lang === 'en' ? '.' : undefined),
-      table_total_taxes_value: this.formatOutputNumber(Number(2)),
-      // table_total_with_taxes_value: this.formatOutputNumber(this.total_inc_taxes, this._lang === 'en' ? '.' : undefined),
-      table_total_with_taxes_value: this.formatOutputNumber(Number(12)),
+      table_tax_base_value: this.formatOutputNumber(this.tax_base, this._lang === 'en' ? '.' : undefined),
+      // table_tax_base_value: this.formatOutputNumber(Number(10)),
+      table_total_taxes_value: this.formatOutputNumber(this.total_taxes, this._lang === 'en' ? '.' : undefined),
+      // table_total_taxes_value: this.formatOutputNumber(Number(2)),
+      table_total_with_taxes_value: this.formatOutputNumber(this.total_inc_taxes, this._lang === 'en' ? '.' : undefined),
+      // table_total_with_taxes_value: this.formatOutputNumber(Number(12)),
       template_configuration: this._templateConfiguration(),
       moment: moment(),
     };
