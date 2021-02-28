@@ -312,8 +312,8 @@ export default class Generator extends Common {
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
     
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
-    // !!! This is not right, there might be different VAT rates on each line
-    this.total_taxes = this.round(Number(this.tax_base) * (Number(this.tax_rate) / 100));
+    // We use total_exc_taxes to calculate tax, because tax_rate is weighted:
+    this.total_taxes = this.round(Number(this.total_exc_taxes) * (Number(this.tax_rate) / 100));
     this.total_inc_taxes = this.round(Number(this.total_exc_taxes) + Number(this.total_taxes));
 
     // Format for display
