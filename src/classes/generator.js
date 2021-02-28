@@ -259,9 +259,9 @@ export default class Generator extends Common {
         const weight = tmp[i].total_product_without_taxes / totalNetAmount;
         taxRate += weight * tmp[i].tax;
         if (tmp[i].tax !== 0) {
-          this.tax_base = this.round(this.tax_base + tmp[i].total_product_without_taxes);
+          this.tax_base = this.round(Number(this.tax_base) + tmp[i].total_product_without_taxes);
         }
-        this.total_exc_taxes = this.round(this.total_exc_taxes + tmp[i].total_product_without_taxes);
+        this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + tmp[i].total_product_without_taxes);
 
         // format for display
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
@@ -288,9 +288,9 @@ export default class Generator extends Common {
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
       taxRate = tmp.tax;
       if (tmp.tax !== 0) {
-        this.tax_base = this.round(this.tax_base + tmp.total_product_without_taxes);
+        this.tax_base = this.round(Number(this.tax_base) + tmp.total_product_without_taxes);
       }
-      this.total_exc_taxes = this.round(this.total_exc_taxes + tmp.total_product_without_taxes);
+      this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + tmp.total_product_without_taxes);
 
       // format for display
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
