@@ -266,7 +266,10 @@ export default class Generator extends Common {
 
         tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
         // TODO: Calculate weighted tax rate (simplified VAT case)
-        const weight = Number(tmp[i].total_product_without_taxes) / Number(totalNetAmount);
+        // When totalNetAmount = 0, make weight 0, which makes tax 0; 
+        // while not logically and mathematically sound, the result is ok (0.00 tax)
+        // without breaking with division by zero.
+        const weight = Number(totalNetAmount) !== 0 ? Number(tmp[i].total_product_without_taxes) / Number(totalNetAmount) : 0;
         this.tax_rate += weight * Number(tmp[i].tax);
         if (Number(tmp[i].tax) !== 0) {
           this.tax_base = this.round(Number(this.tax_base) + Number(tmp[i].total_product_without_taxes));
