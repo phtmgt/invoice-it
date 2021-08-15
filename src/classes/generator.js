@@ -265,7 +265,7 @@ export default class Generator extends Common {
 
         // New code
 
-        tmp[i].total_product_without_taxes = this.round(Decimal.mul(Number(tmp[i].price) * Number(tmp[i].qt)));
+        tmp[i].total_product_without_taxes = this.round(Decimal.mul(Number(tmp[i].price), Number(tmp[i].qt)).toNumber());
         // TODO: Calculate weighted tax rate (simplified VAT case)
         // When totalNetAmount = 0, make weight 0, which makes tax 0;
         // while not logically and mathematically sound, the result is ok (0.00 tax)
