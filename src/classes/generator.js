@@ -1,11 +1,12 @@
-import Common from './common';
-import Emitter from './emitter';
-import Recipient from './recipient';
+import Decimal from 'decimal.js';
 import fs from 'fs';
-import i18n from '../lib/i18n';
 import moment from 'moment-timezone';
 import path from 'path';
 import pug from 'pug';
+import i18n from '../lib/i18n';
+import Recipient from './recipient';
+import Emitter from './emitter';
+import Common from './common';
 
 export default class Generator extends Common {
   constructor(config) {
@@ -244,10 +245,10 @@ export default class Generator extends Common {
     if (Array.isArray(tmp)) {
       // Determine total net amount in order to apply weights to tax rate
       const totalNetAmount = tmp.reduce((accumulator, article) => {
-        accumulator += this.round(Number(article.price) * Number(article.qt));
+        accumulator = Decimal.add(accumulator, this.round(Decimal.mul(Number(article.price), Number(article.qt)).toNumber())).toNumber();
         return accumulator;
       }, 0);
-      let taxRate = 0;
+      // const taxRate = 0;
       for (let i = 0; i < tmp.length; i += 1) {
         this._checkArticle(tmp[i]);
 
@@ -264,17 +265,17 @@ export default class Generator extends Common {
 
         // New code
 
-        tmp[i].total_product_without_taxes = this.round(Number(tmp[i].price) * Number(tmp[i].qt));
+        tmp[i].total_product_without_taxes = this.round(Decimal.mul(Number(tmp[i].price) * Number(tmp[i].qt)));
         // TODO: Calculate weighted tax rate (simplified VAT case)
-        // When totalNetAmount = 0, make weight 0, which makes tax 0; 
+        // When totalNetAmount = 0, make weight 0, which makes tax 0;
         // while not logically and mathematically sound, the result is ok (0.00 tax)
         // without breaking with division by zero.
-        const weight = Number(totalNetAmount) !== 0 ? Number(tmp[i].total_product_without_taxes) / Number(totalNetAmount) : 0;
-        this.tax_rate += weight * Number(tmp[i].tax);
+        const weight = Number(totalNetAmount) !== 0 ? Decimal.div(Number(tmp[i].total_product_without_taxes), Number(totalNetAmount)).toNumber() : 0;
+        this.tax_rate += Decimal.mul(weight, Number(tmp[i].tax)).toNumber();
         if (Number(tmp[i].tax) !== 0) {
-          this.tax_base = this.round(Number(this.tax_base) + Number(tmp[i].total_product_without_taxes));
+          this.tax_base = this.round(Decimal.add(Number(this.tax_base), Number(tmp[i].total_product_without_taxes)).toNumber());
         }
-        this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + Number(tmp[i].total_product_without_taxes));
+        this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp[i].total_product_without_taxes)).toNumber());
 
         // format for display
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
@@ -301,9 +302,9 @@ export default class Generator extends Common {
       tmp.total_product_without_taxes = this.round(Number(tmp.price) * Number(tmp.qt));
       this.tax_rate = Number(tmp.tax);
       if (this.tax_rate !== 0) {
-        this.tax_base = this.round(Number(this.tax_base) + Number(tmp.total_product_without_taxes));
+        this.tax_base = Decimal.add(this.round(Number(this.tax_base), Number(tmp.total_product_without_taxes))).toNumber();
       }
-      this.total_exc_taxes = this.round(Number(this.total_exc_taxes) + Number(tmp.total_product_without_taxes));
+      this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp.total_product_without_taxes)).toNumber());
 
       // format for display
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
@@ -311,13 +312,13 @@ export default class Generator extends Common {
       tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
       tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : undefined);
     }
-    
+
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
-    
+
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // We use total_exc_taxes to calculate tax, because tax_rate is weighted:
-    this.total_taxes = this.round(Number(this.total_exc_taxes) * (Number(this.tax_rate) / 100));
-    this.total_inc_taxes = this.round(Number(this.total_exc_taxes) + Number(this.total_taxes));
+    this.total_taxes = this.round(Decimal.mul(Number(this.total_exc_taxes), (Number(this.tax_rate) / 100)).toNumber());
+    this.total_inc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(this.total_taxes)).toNumber());
 
     // Format for display
     // this.total_exc_taxes = this.formatOutputNumber(this.total_exc_taxes);
@@ -491,7 +492,7 @@ export default class Generator extends Common {
       header_date: i18n.__({ phrase: `${type}_header_date`, locale: this.lang }),
       invoice_header_reference: i18n.__({ phrase: `${type}_invoice_header_reference`, locale: this.lang }),
       header_emitter: i18n.__({ phrase: `${type}_header_emitter`, locale: this.lang }),
-      header_recipient: i18n.__({ phrase: `${type}_header_recipient`, locale: this.lang })
+      header_recipient: i18n.__({ phrase: `${type}_header_recipient`, locale: this.lang }),
     };
   }
 
@@ -724,8 +725,8 @@ export default class Generator extends Common {
         html = this._compile(this.getDebitNote(params));
         break;
       case 'pro_forma':
-            html = this._compile(this.getProForma(params));
-            break;
+        html = this._compile(this.getProForma(params));
+        break;
       default:
         html = this._compile(this.getInvoice(params));
     }
