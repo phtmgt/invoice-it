@@ -48,7 +48,7 @@
     "pug": "^2.0.3"
   },
   "peerDependencies": {
-    "html-pdf": "^2.2.0"
+    "html-pdf": "git+https://github.com/flattro/node-html-pdf.git#master"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
