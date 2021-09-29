@@ -7,6 +7,56 @@ html(lang='en')
         style.
             @import "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600";
 
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-ExtraBold.woff2") format("woff2"), /* Modern browsers */
+                url("../fonts/Manrope/web/Manrope-ExtraBold.woff") format("woff"), /* Legacy browsers */
+                url("../fonts/Manrope/otf/Manrope-ExtraBold.otf") format("truetype"); /* Android, iOS */
+                font-style: normal;
+                font-weight: 800; }
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-Bold.woff2") format("woff2"),
+                url("../fonts/Manrope/web/Manrope-Bold.woff") format("woff"),
+                url("../fonts/Manrope/otf/Manrope-Bold.otf") format("truetype");
+                font-style: normal;
+                font-weight: 700; }
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-SemiBold.woff2") format("woff2"),
+                url("../fonts/Manrope/web/Manrope-SemiBold.woff") format("woff"),
+                url("../fonts/Manrope/otf/Manrope-SemiBold.otf") format("truetype");
+                font-style: normal;
+                font-weight: 600; }
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-Medium.woff2") format("woff2"),
+                url("../fonts/Manrope/web/Manrope-Medium.woff") format("woff"),
+                url("../fonts/Manrope/otf/Manrope-Medium.otf") format("truetype");
+                font-style: normal;
+                font-weight: 500; }
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-Regular.woff2") format("woff2"),
+                url("../fonts/Manrope/web/Manrope-Regular.woff") format("woff"),
+                url("../fonts/Manrope/otf/Manrope-Regular.otf") format("truetype");
+                font-style: normal;
+                font-weight: 400; }
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-Light.woff2") format("woff2"),
+                url("../fonts/Manrope/web/Manrope-Light.woff") format("woff"),
+                url("../fonts/Manrope/otf/Manrope-Light.otf") format("truetype");
+                font-style: normal;
+                font-weight: 300; }
+            @font-face {
+                font-family: "Manrope";
+                src: url("../fonts/Manrope/web/Manrope-ExtraLight.woff2") format("woff2"),
+                url("../fonts/Manrope/web/Manrope-ExtraLight.woff") format("woff"),
+                url("../fonts/Manrope/otf/Manrope-ExtraLight.otf") format("truetype");
+                font-style: normal;
+                font-weight: 200; }
+
             html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, total, time, mark, audio, video {
                 margin: 0;
                 padding: 0;
@@ -43,7 +93,7 @@ html(lang='en')
             }
 
             body {
-                height: 840px;
+                height: 688px;
                 width: 592px;
                 margin: auto;
                 font-family: 'Open Sans', sans-serif;
@@ -188,7 +238,7 @@ html(lang='en')
             }
 
             #summary {
-                height: 155px;
+                height: 175px;
                 margin-top: 30px;
             }
 
@@ -211,6 +261,10 @@ html(lang='en')
                 white-space: pre;
             }
 
+            #summary #note p {
+                word-wrap: break-word;
+            }
+
             #summary #note p#bank {
                 font-weight: bold;
             }
@@ -229,7 +283,7 @@ html(lang='en')
                 text-align: right;
             }
 
-            #summary #total table tr:nth-child(3) {
+            #summary #total table tr:nth-child(4) {
                 background: #efefef;
                 font-weight: 600;
             }
@@ -314,6 +368,9 @@ html(lang='en')
                         else
                             - rowPerPage = template_configuration.rows_per_pages
 
+                        //- Unlimited rows per page
+                        - rowPerPage = template_configuration.articles_count
+                        
                         - for(var row = 0; row <= rowPerPage; row++) {
                         tr
                             td #{articles[rowCounter] && articles[rowCounter].description ? articles[rowCounter].description : ''}
