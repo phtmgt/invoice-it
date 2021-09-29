@@ -762,9 +762,9 @@ export default class Generator extends Common {
    * @private
    */
   _toFileFromHTML(content, filepath) {
-    return new Promise((resolve, reject) => content.toFile(filepath, (err, res) => {
+    return new Promise((resolve, reject) => fs.writeFile(filepath, content, (err) => {
       if (err) reject(err);
-      return resolve(res);
+      return resolve();
     }));
   }
 
