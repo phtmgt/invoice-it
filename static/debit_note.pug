@@ -310,8 +310,8 @@ html(lang='en')
         #pageHeader
         #container
             #header
-                //- #logo
-                //-     img(src=logo, alt='', height='50')
+                #logo
+                    img(src=logo, alt='', height='50')
                 #reference
                     h3
                         strong=debit_note_header_subject
@@ -370,7 +370,7 @@ html(lang='en')
 
                         //- Unlimited rows per page
                         - rowPerPage = template_configuration.articles_count
-                        
+
                         - for(var row = 0; row <= rowPerPage; row++) {
                         tr
                             td #{articles[rowCounter] && articles[rowCounter].description ? articles[rowCounter].description : ''}
