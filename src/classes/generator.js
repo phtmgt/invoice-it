@@ -808,7 +808,7 @@ export default class Generator extends Common {
 
   /**
    * @description Calculates number of pages and items per page
-   * @return {{rows_in_first_page: number, rows_in_others_pages: number, loop_table: number}}
+   * @return {{rows_in_first_page: number, rows_in_others_pages: number, loop_table: number, articles_count: number}}
    * @private
    */
   _templateConfiguration() {
@@ -820,6 +820,7 @@ export default class Generator extends Common {
     };
 
     let nbArticles = this.article.length;
+    templateConfig.articles_count = nbArticles;
     let loop = 1;
     while (true) {
       if (loop === 1) {
