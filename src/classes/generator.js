@@ -282,7 +282,7 @@ export default class Generator extends Common {
         tmp[i].price = this.formatOutputNumber(tmp[i].price, this._lang === 'en' ? '.' : undefined);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax, this._lang === 'en' ? '.' : undefined);
         tmp[i].qt = this.formatOutputNumber(tmp[i].qt, this._lang === 'en' ? '.' : undefined);
-        tmp[i].tax_amount = this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber());
+        tmp[i].tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber()));
       }
     } else {
       this._checkArticle(tmp);
@@ -312,7 +312,7 @@ export default class Generator extends Common {
       tmp.price = this.formatOutputNumber(tmp.price, this._lang === 'en' ? '.' : undefined);
       tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
       tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : undefined);
-      tmp.tax_amount = this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber());
+      tmp.tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber()));
     }
 
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
@@ -403,7 +403,7 @@ export default class Generator extends Common {
 
   /**
    * @description Precompile translation to merging glabal with custom translations
-   * @returns {{logo: *, header_date: *, table_information, table_description, table_tax, table_quantity,
+   * @returns {{logo: *, header_date: *, table_information, table_description, table_tax, table_tax_amount, table_quantity,
    * table_price_without_taxes, table_price_without_taxes_unit, table_note, table_total_without_taxes, table_tax_base
    * table_total_taxes, table_total_with_taxes, fromto_phone, fromto_mail, footer, moment: (*|moment.Moment)}}
    * @private
@@ -415,6 +415,7 @@ export default class Generator extends Common {
       table_information: i18n.__({ phrase: 'table_information', locale: this.lang }),
       table_description: i18n.__({ phrase: 'table_description', locale: this.lang }),
       table_tax: i18n.__({ phrase: 'table_tax', locale: this.lang }),
+      table_tax_amount: i18n.__({ phrase: 'table_tax_amount', locale: this.lang }),
       table_quantity: i18n.__({ phrase: 'table_quantity', locale: this.lang }),
       table_price_without_taxes: i18n.__({ phrase: 'table_price_without_taxes', locale: this.lang }),
       table_price_without_taxes_unit: i18n.__({ phrase: 'table_price_without_taxes_unit', locale: this.lang }),
