@@ -282,6 +282,7 @@ export default class Generator extends Common {
         tmp[i].price = this.formatOutputNumber(tmp[i].price, this._lang === 'en' ? '.' : undefined);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax, this._lang === 'en' ? '.' : undefined);
         tmp[i].qt = this.formatOutputNumber(tmp[i].qt, this._lang === 'en' ? '.' : undefined);
+        tmp[i].tax_amount = this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber());
       }
     } else {
       this._checkArticle(tmp);
@@ -311,6 +312,7 @@ export default class Generator extends Common {
       tmp.price = this.formatOutputNumber(tmp.price, this._lang === 'en' ? '.' : undefined);
       tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
       tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : undefined);
+      tmp.tax_amount = this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber());
     }
 
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
@@ -349,6 +351,7 @@ export default class Generator extends Common {
     if (!this.isNumeric(article.price)) throw new Error('Price attribute have to be a number');
     if (!Object.prototype.hasOwnProperty.call(article, 'qt')) throw new Error('Qt attribute is missing');
     if (!this.isNumeric(article.qt)) throw new Error('Qt attribute have to be a number');
+    if (!this.isNumeric(article.tax_amount)) throw new Error('Tax amount attribute have to be a number');
     // if (!Number.isInteger(article.qt)) throw new Error('Qt attribute have to be an integer, not a float');
   }
 

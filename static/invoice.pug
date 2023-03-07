@@ -358,6 +358,7 @@ html(lang='en')
                         th=table_price_without_taxes_unit
                         th=table_quantity
                         th=table_price_without_taxes
+                        th=table_tax_amount
 
                         - var rowPerPage = 0
                         if loopTable === 0
@@ -366,7 +367,7 @@ html(lang='en')
                             - rowPerPage = template_configuration.rows_in_last_page
                         else
                             - rowPerPage = template_configuration.rows_per_pages
-                        
+
                         //- Unlimited rows per page
                         - rowPerPage = template_configuration.articles_count
 
@@ -377,6 +378,7 @@ html(lang='en')
                             td #{articles[rowCounter] && articles[rowCounter].price ? articles[rowCounter].price : ''}
                             td #{articles[rowCounter] && articles[rowCounter].qt ? articles[rowCounter].qt : ''}
                             td #{articles[rowCounter] && articles[rowCounter].total_product_without_taxes ? articles[rowCounter].total_product_without_taxes : ''}
+                            td #{articles[rowCounter] && articles[rowCounter].tax_amount ? articles[rowCounter].tax_amount : ''}
                         - rowCounter++
                         - }
 
