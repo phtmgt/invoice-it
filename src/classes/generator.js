@@ -351,7 +351,7 @@ export default class Generator extends Common {
     if (!this.isNumeric(article.price)) throw new Error('Price attribute have to be a number');
     if (!Object.prototype.hasOwnProperty.call(article, 'qt')) throw new Error('Qt attribute is missing');
     if (!this.isNumeric(article.qt)) throw new Error('Qt attribute have to be a number');
-    if (!this.isNumeric(article.tax_amount)) throw new Error('Tax amount attribute have to be a number');
+    // if (!this.isNumeric(article.tax_amount)) throw new Error('Tax amount attribute have to be a number');
     // if (!Number.isInteger(article.qt)) throw new Error('Qt attribute have to be an integer, not a float');
   }
 
