@@ -276,13 +276,14 @@ export default class Generator extends Common {
           this.tax_base = this.round(Decimal.add(Number(this.tax_base), Number(tmp[i].total_product_without_taxes)).toNumber());
         }
         this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp[i].total_product_without_taxes)).toNumber());
+        tmp[i].tax_amount = this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber());
 
         // format for display
-        tmp[i].tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber()));
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
         tmp[i].price = this.formatOutputNumber(tmp[i].price, this._lang === 'en' ? '.' : undefined);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax, this._lang === 'en' ? '.' : undefined);
         tmp[i].qt = this.formatOutputNumber(tmp[i].qt, this._lang === 'en' ? '.' : undefined);
+        tmp[i].tax_amount = this.formatOutputNumber(tmp[i].tax_amount, this._lang === 'en' ? '.' : undefined);
       }
     } else {
       this._checkArticle(tmp);
@@ -306,9 +307,10 @@ export default class Generator extends Common {
         this.tax_base = Decimal.add(this.round(Number(this.tax_base), Number(tmp.total_product_without_taxes))).toNumber();
       }
       this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp.total_product_without_taxes)).toNumber());
+      tmp.tax_amount = this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber());
 
       // format for display
-      tmp.tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber()));
+      tmp.tax_amount = this.formatOutputNumber(tmp.tax_amount, this._lang === 'en' ? '.' : undefined);
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
       tmp.price = this.formatOutputNumber(tmp.price, this._lang === 'en' ? '.' : undefined);
       tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
