@@ -278,11 +278,11 @@ export default class Generator extends Common {
         this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp[i].total_product_without_taxes)).toNumber());
 
         // format for display
+        tmp[i].tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber()));
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
         tmp[i].price = this.formatOutputNumber(tmp[i].price, this._lang === 'en' ? '.' : undefined);
         tmp[i].tax = this.formatOutputNumber(tmp[i].tax, this._lang === 'en' ? '.' : undefined);
         tmp[i].qt = this.formatOutputNumber(tmp[i].qt, this._lang === 'en' ? '.' : undefined);
-        tmp[i].tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber()));
       }
     } else {
       this._checkArticle(tmp);
@@ -308,11 +308,11 @@ export default class Generator extends Common {
       this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp.total_product_without_taxes)).toNumber());
 
       // format for display
+      tmp.tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber()));
       tmp.total_product_without_taxes = this.formatOutputNumber(tmp.total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
       tmp.price = this.formatOutputNumber(tmp.price, this._lang === 'en' ? '.' : undefined);
       tmp.tax = this.formatOutputNumber(tmp.tax, this._lang === 'en' ? '.' : undefined);
       tmp.qt = this.formatOutputNumber(tmp.qt, this._lang === 'en' ? '.' : undefined);
-      tmp.tax_amount = this.formatOutputNumber(this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber()));
     }
 
     this._article = (this._article) ? this._article.concat(tmp) : [].concat(tmp);
