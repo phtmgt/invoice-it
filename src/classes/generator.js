@@ -241,7 +241,7 @@ export default class Generator extends Common {
    */
   set article(value) {
     const tmp = value;
-
+    this.total_taxes = 0;
     if (Array.isArray(tmp)) {
       // Determine total net amount in order to apply weights to tax rate
       const totalNetAmount = tmp.reduce((accumulator, article) => {
@@ -277,6 +277,7 @@ export default class Generator extends Common {
         }
         this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp[i].total_product_without_taxes)).toNumber());
         tmp[i].tax_amount = this.round(Decimal.mul(Number(tmp[i].total_product_without_taxes), Decimal.div(Number(tmp[i].tax), 100)).toNumber());
+        this.total_taxes = this.round(Decimal.add(Number(this.total_taxes), Number(tmp[i].tax_amount)).toNumber());
 
         // format for display
         tmp[i].total_product_without_taxes = this.formatOutputNumber(tmp[i].total_product_without_taxes, this._lang === 'en' ? '.' : undefined);
@@ -307,7 +308,9 @@ export default class Generator extends Common {
         this.tax_base = Decimal.add(this.round(Number(this.tax_base), Number(tmp.total_product_without_taxes))).toNumber();
       }
       this.total_exc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(tmp.total_product_without_taxes)).toNumber());
-      tmp.tax_amount = this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber());
+      // tmp.tax_amount = this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(tmp.tax), 100)).toNumber());
+      tmp.tax_amount = this.round(Decimal.mul(Number(tmp.total_product_without_taxes), Decimal.div(Number(this.tax_rate), 100)).toNumber());
+      this.total_taxes = this.round(Decimal.add(Number(this.total_taxes), Number(tmp.tax_amount)).toNumber());
 
       // format for display
       tmp.tax_amount = this.formatOutputNumber(tmp.tax_amount, this._lang === 'en' ? '.' : undefined);
@@ -321,7 +324,7 @@ export default class Generator extends Common {
 
     // Calculate tax as percentage of total sum, instead of a sum of the individual tax values for each line.
     // We use total_exc_taxes to calculate tax, because tax_rate is weighted:
-    this.total_taxes = this.round(Decimal.mul(Number(this.total_exc_taxes), (Number(this.tax_rate) / 100)).toNumber());
+    // this.total_taxes = this.round(Decimal.mul(Number(this.total_exc_taxes), (Number(this.tax_rate) / 100)).toNumber());
     this.total_inc_taxes = this.round(Decimal.add(Number(this.total_exc_taxes), Number(this.total_taxes)).toNumber());
 
     // Format for display
