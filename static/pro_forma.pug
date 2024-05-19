@@ -357,38 +357,33 @@ html(lang='en')
 
                 - var rowCounter = 0
                 - for(var loopTable = 0; loopTable < template_configuration.loop_table; loopTable++) {
-                table(class=(loopTable === 0 ? '' : 'padding-table'))
-                    tr
-                        th=table_description
-                        th=table_tax
-                        th=table_price_without_taxes_unit
-                        th=table_quantity
-                        th=table_price_without_taxes
-
-                        - var rowPerPage = 0
-                        if loopTable === 0
-                            - rowPerPage = template_configuration.rows_in_first_page
-                        else if loopTable === (template_configuration.loop_table - 1)
-                            - rowPerPage = template_configuration.rows_in_last_page
-                        else
-                            - rowPerPage = template_configuration.rows_per_pages
-
-                        //- Unlimited rows per page
-                        - rowPerPage = template_configuration.articles_count
-
-                        - for(var row = 0; row <= rowPerPage; row++) {
-                        tr
-                            td #{articles[rowCounter] && articles[rowCounter].description ? articles[rowCounter].description : ''}
-                            td #{articles[rowCounter] && articles[rowCounter].tax ? articles[rowCounter].tax + '%': ''}
-                            td #{articles[rowCounter] && articles[rowCounter].price ? articles[rowCounter].price : ''}
-                            td #{articles[rowCounter] && articles[rowCounter].qt ? articles[rowCounter].qt : ''}
-                            td #{articles[rowCounter] && articles[rowCounter].total_product_without_taxes ? articles[rowCounter].total_product_without_taxes : ''}
-                        - rowCounter++
-                        - }
-
-                        //- if loopTable > 0
-                        //-     div(style='page-break-after:always')
-                - }
+                    - if (articles[rowCounter]) { // Check if there are articles left before starting a new table
+                        table(class=(loopTable === 0 ? '' : 'padding-table'))
+                            tr
+                                th=table_description
+                                th=table_tax
+                                th=table_price_without_taxes_unit
+                                th=table_quantity
+                                th=table_price_without_taxes
+                
+                            - var rowsPerPage = (loopTable === 0 ? template_configuration.rows_in_first_page
+                                             : loopTable === (template_configuration.loop_table - 1) ? template_configuration.rows_in_last_page
+                                             : template_configuration.rows_per_pages)
+                
+                            - for(var row = 0; row < rowsPerPage && articles[rowCounter]; row++) {
+                                tr
+                                    td=articles[rowCounter].description
+                                    td=articles[rowCounter].tax + '%'
+                                    td=articles[rowCounter].price
+                                    td=articles[rowCounter].qt
+                                    td=articles[rowCounter].total_product_without_taxes
+                                - rowCounter++
+                            }
+                
+                        if (loopTable > 0)
+                            div(style='page-break-after:always')
+                    - }
+                }
 
             #summary
                 #note
