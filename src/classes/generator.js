@@ -836,6 +836,8 @@ export default class Generator extends Common {
         nbArticles -= templateConfig.rows_in_first_page;
         if (nbArticles <= 0) {
           templateConfig.loop_table = (templateConfig.rows_in_first_page !== template_rows_per_page) ? 1 : 2;
+          // Just use 1 table, as it is impossible to make multiple tables fit properly
+          templateConfig.loop_table = 1;
           return templateConfig;
         }
       }
@@ -843,11 +845,15 @@ export default class Generator extends Common {
       if (loop >= 2) {
         if (nbArticles <= templateConfig.rows_in_last_page) {
           templateConfig.loop_table = loop;
+          // Just use 1 table, as it is impossible to make multiple tables fit properly
+          templateConfig.loop_table = 1;
           return templateConfig;
         }
         nbArticles -= templateConfig.rows_per_pages;
         if (nbArticles <= 0) {
           templateConfig.loop_table = loop;
+          // Just use 1 table, as it is impossible to make multiple tables fit properly
+          templateConfig.loop_table = 1;
           return templateConfig;
         }
       }
